@@ -39,22 +39,17 @@ cd knowledge-skill
 
 This copies `skill/` to `~/.claude/skills/knowledge/` and creates your personal sources file (see below). Run it again after editing, and start a new session to pick up changes. The desktop app's **Code** tab loads skills from `~/.claude/skills/` too, so this one install covers the terminal, IDEs and the desktop Code tab. Type `/knowledge` there.
 
-### Claude desktop / web app (regular chat)
+### Claude desktop / web app
 
 1. Build the upload package:
    ```
    ./package.sh
    ```
-   This creates `dist/knowledge.zip`. The packaged `SKILL.md` drops the `argument-hint` field, because the chat app rejects uploads that contain it, and it replaces the Claude Code-only `$ARGUMENTS` placeholder.
-2. In the app, turn on **Settings → Capabilities → Code execution and file creation**. Skills need it.
-3. Go to **Customize → Skills** (claude.ai/customize/skills), click **+ → Create skill → Upload a skill**, and choose `dist/knowledge.zip`. Some docs describe the menu as *Settings → Features*.
-4. Turn on **web search** in the chat (the **+** button in the message box).
+   This creates `dist/knowledge.zip`. It's a copy of `skill/` adjusted for the app: the app rejects the `argument-hint` field, so the package leaves it out.
+2. In Claude, open **Customize → Skills**, choose **Upload a skill**, and select `dist/knowledge.zip`.
+3. Use it in any chat with `/knowledge <your question>`. The options above work the same way.
 
-Limitations of the chat version:
-- **No slash command.** Chat skills are picked automatically from their description, so ask naturally: *"Build me a knowledge map: are there more solar systems in our galaxy?"* You can add `--level expert` or `--kids` to the message.
-- **Verification may be weaker.** The skill looks up catalogues such as openlibrary.org and data.bn.org.pl. In chat, those requests depend on your network settings. Under **Settings → Capabilities**, set *Allow network egress* to **Full** for the most reliable results. With restricted access, some checks can fail, and unverifiable items get dropped, so expect shorter lists.
-- **No personal sources file.** The chat app can't read `~/.claude/knowledge/my-sources.md`. To use your own preferences there, add them to `skill/trusted-sources.md` in a private copy before packaging.
-- Skills uploaded to the chat app may also show up in Claude Code sessions. If you see `/knowledge` twice, disable one of them.
+Your personal sources file (below) isn't available in the app, because the app can't read files on your computer. To use your own preferences there, add them to `skill/trusted-sources.md` in a private copy before packaging.
 
 ## Layout
 
@@ -65,11 +60,11 @@ Limitations of the chat version:
 | `skill/trusted-sources.md` | Shared default hints, how to infer trust in any field, and the blocklist (keep generic) |
 | `templates/my-sources.md` | Template for your personal layer |
 | `install.sh` | Installs for Claude Code |
-| `package.sh` | Builds `dist/knowledge.zip` for the desktop/web chat app |
+| `package.sh` | Builds `dist/knowledge.zip` for the Claude desktop/web app |
 
 ## Personal preferences
 
-Your own trusted sources and blocklist go in `~/.claude/knowledge/my-sources.md`. The installer creates it once and never overwrites it. It takes precedence over `skill/trusted-sources.md`, so this folder stays a clean slate you can share. This applies to Claude Code only; see the limitations above for the chat app.
+Your own trusted sources and blocklist go in `~/.claude/knowledge/my-sources.md`. The installer creates it once and never overwrites it. It takes precedence over `skill/trusted-sources.md`, so this folder stays a clean slate you can share. This applies to Claude Code only; see above for the desktop/web app.
 
 ## License
 
