@@ -6,7 +6,7 @@
 set -euo pipefail
 
 src="$(cd "$(dirname "$0")" && pwd)"
-build="$src/dist/build/knowledge"
+build="$src/dist/build"
 
 rm -rf "$src/dist"
 mkdir -p "$build"
@@ -22,6 +22,7 @@ s = s.replace("The user asked: **$ARGUMENTS**",
 open(p, "w", encoding="utf-8").write(s)
 PY
 
-(cd "$src/dist/build" && zip -qr "$src/dist/knowledge.zip" knowledge)
-rm -rf "$src/dist/build"
+# SKILL.md must sit at the zip root, not inside a folder, or the app rejects it.
+(cd "$build" && zip -qr "$src/dist/knowledge.zip" .)
+rm -rf "$build"
 echo "Built $src/dist/knowledge.zip"
